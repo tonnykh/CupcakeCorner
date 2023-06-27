@@ -19,9 +19,7 @@ struct ContentView: View {
                             Text(Order.types[index])
                         }
                     }
-                }
-                
-                Section {
+                    
                     Stepper("Number of cakes: \(order.quantity)", value: $order.quantity,
                         in: 1...20)
                 }
@@ -36,11 +34,17 @@ struct ContentView: View {
                     }
                 }
                 
+                Section {
+                    NavigationLink {
+                        AddressView()
+                    } label: {
+                        Text("Delivery details")
+                    }
+                }
             }
             .navigationTitle("Cupcake Corner")
         }
     }
-
 }
 
 struct ContentView_Previews: PreviewProvider {

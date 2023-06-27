@@ -9,17 +9,25 @@ import Foundation
 import SwiftUI
 
 
-class Order: ObservableObject, Codable {
+class ObservableOrder: ObservableObject {
+    @Published var order: Order
+    
+    init(order: Order) {
+        self.order = order
+    }
+}
+
+struct Order: Codable {
     static let types: [String] = ["Vanilla", "Strawberry", "Chocolate", "Rainbow"]
     
     enum CodingKeys: CodingKey {
         case type, quantity, extraFrosting, addSprinkles, name, streetAddress, city, zip
     }
     
-    @Published var type: Int = 0
-    @Published var quantity: Int = 3
+    var type: Int = 0
+    var quantity: Int = 3
     
-    @Published var specialRequestEnabled: Bool = false {
+    var specialRequestEnabled: Bool = false {
         didSet {
             if specialRequestEnabled == false {
                 extraFrosting = false
@@ -28,13 +36,13 @@ class Order: ObservableObject, Codable {
         }
     }
     
-    @Published var extraFrosting: Bool = false
-    @Published var addSprinkles: Bool = false
+    var extraFrosting: Bool = false
+    var addSprinkles: Bool = false
     
-    @Published var name: String = ""
-    @Published var streetAddress: String = ""
-    @Published var city: String = ""
-    @Published var zip: String = ""
+    var name: String = ""
+    var streetAddress: String = ""
+    var city: String = ""
+    var zip: String = ""
     
     var hasValidAddress: Bool {
         if name.trimmingCharacters(in: .whitespaces).isEmpty || streetAddress.trimmingCharacters(in: .whitespaces).isEmpty || city.trimmingCharacters(in: .whitespaces).isEmpty || zip.trimmingCharacters(in: .whitespaces).isEmpty {
@@ -81,7 +89,7 @@ class Order: ObservableObject, Codable {
         try container.encode(zip, forKey: .zip)
     }
     
-    required init(from decoder: Decoder) throws {
+     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
 
         type = try container.decode(Int.self, forKey: .type)

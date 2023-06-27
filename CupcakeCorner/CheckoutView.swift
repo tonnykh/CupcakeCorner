@@ -13,6 +13,8 @@ struct CheckoutView: View {
     @State private var confirmationMessage = ""
     @State private var showingConfirmation = false
     
+    @State private var isInternetFail: Bool = false
+    
     var body: some View {
         ScrollView {
             AsyncImage(url: URL(string: "https://hws.dev/img/cupcakes@3x.jpg")) { image in
@@ -36,6 +38,9 @@ struct CheckoutView: View {
         }
         .navigationTitle("Check out")
         .navigationBarTitleDisplayMode(.inline)
+        .alert("No Internet connection 🛜⁉️", isPresented: $isInternetFail, actions: {
+            Button("OK", action: {})
+        })
         .alert("Thank You!", isPresented: $showingConfirmation) {
             Button("OK") { }
         } message: {
@@ -62,6 +67,7 @@ struct CheckoutView: View {
             showingConfirmation = true
         } catch {
             print("Checkout failed.")
+            isInternetFail = true
         }
     }
 }
